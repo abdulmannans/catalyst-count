@@ -10,7 +10,7 @@
            <div class="col-md-12">
                <div class="card shadow">
                    <div class="card-header bg-dark text-white">
-                       <h4 class="mb-0">You are logged in</h4>
+                       <h4 class="mb-0">Companies List</h4>
                    </div>
 
                    <div class="card-body">
