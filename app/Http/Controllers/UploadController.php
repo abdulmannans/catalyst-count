@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\CompaniesImport;
+use Exception;
 use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -15,21 +16,31 @@ class UploadController extends Controller
 {
     public function index()
     {
-        return view('upload');
+        try{
+            return view('upload');
+        }catch(Exception $e){
+            info("Error " .  $e->getMessage());
+            return view('errors.500');
+        }
     }
 
     public function upload(Request $request)
     {
-        $request->validate([
-            'file' => 'required|file',
-            'chunk' => 'required|integer',
-            'totalChunks' => 'required|integer',
-        ]);
-
-        $file = $request->file('file');
-
-        Excel::import(new CompaniesImport, $file);
-
-        return response()->json(['message' => 'Chunk uploaded successfully']);
+        try{
+            $request->validate([
+                'file' => 'required|file',
+                'chunk' => 'required|integer',
+                'totalChunks' => 'required|integer',
+            ]);
+    
+            $file = $request->file('file');
+    
+            Excel::import(new CompaniesImport, $file);
+    
+            return response()->json(['message' => 'Chunk uploaded successfully']);
+        }catch(Exception $e){
+            info("Error " .  $e->getMessage());
+            return view('errors.500');
+        }
     }
 }

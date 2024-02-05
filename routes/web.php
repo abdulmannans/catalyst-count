@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
@@ -18,18 +19,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [LoginController::class, 'index']);
-Route::post('/', [LoginController::class, 'login'])->name('login');
+Route::get('/', [AuthController::class, 'loginIndex']);
+Route::post('/', [AuthController::class, 'login'])->name('login');
 
 
-Route::get('/register', [RegistrationController::class, 'index'])->name('register');
-Route::post('/register', [RegistrationController::class, 'register']);
+Route::get('/register', [AuthController::class, 'registerIndex'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/upload', [UploadController::class, 'index'])->name('upload');
-Route::post('/upload', [UploadController::class, 'upload']);
+Route::group(['middleware' => 'auth'], function(){
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/upload', [UploadController::class, 'index'])->name('upload');
+    Route::post('/upload', [UploadController::class, 'upload']);
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/', [CompanyController::class, 'index'])->name('companies.index');
+});
+
 
 
 
