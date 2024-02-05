@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,9 +17,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/login', function () {
-    return view('login');
-})->name('login');
+Route::get('/', [LoginController::class, 'index']);
+Route::post('/', [LoginController::class, 'login'])->name('login');
 
-Route::get('/password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
-Route::get('/register', 'RegisterController@showRegistrationForm')->name('register');
+
+Route::get('/register', [RegistrationController::class, 'index'])->name('register');
+Route::post('/register', [RegistrationController::class, 'register']);
+
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/upload', [UploadController::class, 'index'])->name('upload');
+Route::post('/upload', [UploadController::class, 'upload']);
+
+

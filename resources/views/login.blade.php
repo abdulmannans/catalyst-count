@@ -7,14 +7,15 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow-lg mx-auto" style="max-width: 400px;">
-                <div class="card-header text-white text-center" style="background-color: #333;">
+                <div class="card-header bg-dark text-white text-center">
                     <h2 class="mb-0">Login</h2>
                 </div>
                 <div class="card-body">
-                    <form>
+                    <form method="POST" action="{{route('login')}}">
+                        @csrf
                         <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username">
+                            <label for="Email">Email</label>
+                            <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email">
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
