@@ -13,7 +13,6 @@ class CompaniesImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
-        info($row);
         if(array_key_exists(0,$row)){
             Company::updateOrCreate(
                 [

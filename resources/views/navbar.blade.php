@@ -14,7 +14,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('upload') }}">Upload Data</a>
                 </li>
-                <!-- Add more navigation items as needed -->
             </ul>
         </div>
     </div>

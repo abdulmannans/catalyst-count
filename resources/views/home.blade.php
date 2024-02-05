@@ -14,7 +14,6 @@
                    </div>
 
                    <div class="card-body">
-                       <!-- Filter form -->
                        <form action="" method="GET">
                             <div class="row mb-3">
                                 <div class="col-md-4">
@@ -25,21 +24,17 @@
                                     <label for="name">Name:</label>
                                     <input type="text" class="form-control" name="name" value="{{ request('name') }}">
                                 </div>
-                                <!-- Add similar inputs for other columns as needed -->
                                 <div class="col-md-4 align-self-end">
                                     <button type="submit" class="btn btn-primary">Filter</button>
                                 </div>
                             </div>
                         </form>
 
-
-                       <!-- Display count of records -->
                        <div class="mb-3">
                            <strong>Records Count:</strong> {{ $companies->total() }}
                        </div>
 
                        <div class="table-responsive">
-                           <!-- Display the table with filtered data -->
                            <table class="table table-bordered" id="companiesTable">
                                <thead>
                                    <tr>
@@ -76,12 +71,10 @@
                            </table>
                        </div>
 
-                       <!-- Laravel's default pagination links with Bootstrap 4 styling -->
                        <div class="d-flex justify-content-end">
                            {{ $companies->appends(request()->except('page'))->links() }}
                        </div>
 
-                       <!-- Add any additional content for the home page -->
                    </div>
                </div>
            </div>

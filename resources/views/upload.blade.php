@@ -38,7 +38,6 @@
     </div>
 
     <style>
-        /* Hide the default file input button visually */
         #file::-webkit-file-upload-button {
             display: none;
         }
@@ -47,8 +46,8 @@
         }
 
         #upload-progress {
-            background-color: #000; /* Black background color */
-            color: #fff; /* White text color */
+            background-color: #000;
+            color: #fff;
             text-align: center;
             font-size: 16px;
             padding: 5px;
@@ -60,9 +59,9 @@
         }
 
         .progress {
-            height: 30px; /* Adjust the height of the progress bar */
-            border-radius: 5px; /* Add rounded corners */
-            overflow: hidden; /* Hide overflowing content */
+            height: 30px;
+            border-radius: 5px;
+            overflow: hidden;
         }
     </style>
 
@@ -72,7 +71,7 @@
         async function uploadFile() {
             const fileInput = document.getElementById('file');
             const file = fileInput.files[0];
-            const chunkSize = 1024 * 1024; // 1MB chunks (adjust as needed)
+            const chunkSize = 1024 * 1024;
             const totalChunks = Math.ceil(file.size / chunkSize);
             let currentChunk = 0;
 
@@ -85,7 +84,7 @@
 
                 const formData = new FormData();
                 formData.append('file', chunk, file.name);
-                formData.append('chunk', currentChunk + 1); // 1-based index
+                formData.append('chunk', currentChunk + 1);
                 formData.append('totalChunks', totalChunks);
                 formData.append('_token', "{{ csrf_token() }}")
 

@@ -20,14 +20,12 @@ class UploadController extends Controller
 
     public function upload(Request $request)
     {
-        // Validate the request
         $request->validate([
             'file' => 'required|file',
             'chunk' => 'required|integer',
             'totalChunks' => 'required|integer',
         ]);
 
-        // // Get the uploaded chunk
         $file = $request->file('file');
 
         Excel::import(new CompaniesImport, $file);
