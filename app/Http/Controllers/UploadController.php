@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\CompaniesImport;
+use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Maatwebsite\Excel\Facades\Excel;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
@@ -12,14 +15,23 @@ class UploadController extends Controller
 {
     public function index()
     {
-        phpinfo();
         return view('upload');
     }
 
     public function upload(Request $request)
     {
+        // Validate the request
         $request->validate([
-            'file' => 'required|file|max:214748364',
+            'file' => 'required|file',
+            'chunk' => 'required|integer',
+            'totalChunks' => 'required|integer',
         ]);
+
+        // // Get the uploaded chunk
+        $file = $request->file('file');
+
+        Excel::import(new CompaniesImport, $file);
+
+        return response()->json(['message' => 'Chunk uploaded successfully']);
     }
 }

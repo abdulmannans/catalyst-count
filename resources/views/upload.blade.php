@@ -21,17 +21,16 @@
                                 </div>
                             </div>
                         </div>
-                        <form action="/upload" method="post" enctype="multipart/form-data" id="uploadForm">
-                            @csrf
+                        <div>
                             <div class="mb-3">
-                                <label for="dataFile" class="form-label text-dark">Choose CSV File:</label>
+                                <label for="file" class="form-label text-dark">Choose CSV File:</label>
                                 <div class="input-group">
-                                    <input type="file" class="form-control visually-hidden" id="dataFile" name="dataFile" accept=".csv" aria-describedby="inputGroupFileAddon">
-                                    <label class="input-group-text" for="dataFile" id="browseButton">Browse</label>
+                                    <input type="file" class="form-control visually-hidden" id="file" name="file" accept=".csv" aria-describedby="inputGroupFileAddon">
+                                    <label class="input-group-text" for="file" id="browseButton">Browse</label>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary">Upload</button>
-                        </form>
+                            <button  class="btn btn-primary" onclick="uploadFile()">Upload</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -40,11 +39,11 @@
 
     <style>
         /* Hide the default file input button visually */
-        #dataFile::-webkit-file-upload-button {
+        #file::-webkit-file-upload-button {
             display: none;
         }
-        #dataFile::file-selector-button {
-            visibility: hidden;
+        #file::file-selector-button {
+            display: none;
         }
 
         #upload-progress {
@@ -68,33 +67,62 @@
     </style>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dropzone@5.9.3/dist/min/dropzone.min.js"></script>
-    <script>
-        Dropzone.options.uploadCsv = { // caelized version of the `id`
-        paramName: "file", // The name that will be used to transfer the file
-        maxFilesize: 2048, // MB
-        chunking: true,
-        forceChunking: true,
-        chunkSize: 5000000, // KB
-        addRemoveLinks: true,
-        parallelUploads: 1,
-        acceptedFiles: '.csv', 
-        createImageThumbnails:false,
-        autoQueue:true,
-        accept: function(file, done) {
-            done();
-            $("#upload-progress-container").show();
-        },
-        init: function () {
-            this.on("uploadprogress", function (file, progress, bytesSent) {
-                var progressText = progress.toFixed(1) + "%";
-                $("#upload-progress").css("width", progressText).text(progressText);
-            });
 
-            this.on('error', function(file, response) {d
-                console.log(response);
-            });
+    <script>
+        async function uploadFile() {
+            const fileInput = document.getElementById('file');
+            const file = fileInput.files[0];
+            const chunkSize = 1024 * 1024; // 1MB chunks (adjust as needed)
+            const totalChunks = Math.ceil(file.size / chunkSize);
+            let currentChunk = 0;
+
+            document.getElementById('upload-progress-container').style.display = 'block';
+
+            async function uploadChunk() {
+                const start = currentChunk * chunkSize;
+                const end = Math.min(start + chunkSize, file.size);
+                const chunk = file.slice(start, end);
+
+                const formData = new FormData();
+                formData.append('file', chunk, file.name);
+                formData.append('chunk', currentChunk + 1); // 1-based index
+                formData.append('totalChunks', totalChunks);
+                formData.append('_token', "{{ csrf_token() }}")
+
+                try {
+                    const response = await fetch('/upload', {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    console.log(data);
+
+                    const progress = ((currentChunk + 1) / totalChunks) * 100;
+                    document.getElementById('upload-progress').style.width = `${progress}%`;
+                    document.getElementById('upload-progress').setAttribute('aria-valuenow', progress);
+                    document.querySelector('.progress-text').innerText = `${Math.round(progress)}%`;
+                    console.log(progress);
+
+                    if (currentChunk < totalChunks - 1) {
+                        currentChunk++;
+                        await uploadChunk();
+                    } else {
+                        alert('File uploaded successfully!');
+                    }
+                } catch (error) {
+                    console.error('Error uploading file:', error);
+                    alert('Error uploading file. Please try again.');
+                }
+            }
+
+            if (file) {
+                await uploadChunk();
+            }
         }
-    }
     </script>
 @endsection

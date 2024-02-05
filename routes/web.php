@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegistrationController;
@@ -27,5 +28,8 @@ Route::post('/register', [RegistrationController::class, 'register']);
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/upload', [UploadController::class, 'index'])->name('upload');
 Route::post('/upload', [UploadController::class, 'upload']);
+
+Route::get('/', [CompanyController::class, 'index'])->name('companies.index');
+
 
 
