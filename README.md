@@ -34,6 +34,6 @@ The overview of the developed pages.
 ### 3. Upload
 - This page handles the upload functionality, particularly for 1GB files. Uploading such large files via form submission can be resource-intensive, so the approach used involves chunking data at the client side. A real-time progress bar is displayed during the upload process. The "maatwebsite/excel" package (version ^3.1) is used for importing data into the table. The updateOrCreate method is used to avoid record duplication, with the first column serving as a unique reference. Special considerations are made for handling inconsistencies in CSV data files, especially after reaching 100,000 records there are few problem with the data.
 
-```
+##
 It was a wonderful experience working on this project, and I truly enjoyed the task. If you have any questions or encounter issues, feel free to reach out. Happy coding!
-```
+
